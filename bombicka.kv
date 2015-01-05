@@ -1,0 +1,126 @@
+#:kivy 1.0.9
+
+<Player>:
+	gpos: self.parent.center
+	color: (1,1,1)
+	size: dp(25), dp(25)
+	img: "img/p_normal_red.png"
+	text: ""
+	canvas.after:
+		Color:
+			rgb: self.color
+		Ellipse:
+			pos: self.pos
+			size: self.size
+			source: self.img
+	Label:
+		font_size: 15
+		color: (0,0,1,1)
+		pos: self.parent.center
+		text: self.parent.text
+
+<Fire>:
+	color: (1,1,1)
+	transparent: 0
+	anim: None
+	img: "img/p_killed.png"
+	canvas:
+		Color:
+			rgb: self.color
+			a: self.transparent
+		Rectangle:
+			pos: self.pos
+			size: self.size
+			source: self.img
+
+<Resource>:
+	size: dp(15), dp(15)
+	color: (1,0,0.7)
+	canvas:
+		Color:
+			rgb: self.color
+		Ellipse:
+			pos: self.pos
+			size: self.size
+
+<Explosion>:
+	img: "img/p_killed.png"
+	size: self.init_size1
+	color: (1,1,1)
+	transparent: 0
+	anim: None
+	end_time: 0
+	canvas:
+		Color:
+			rgba: self.color[0],self.color[1],self.color[2], self.transparent
+		Ellipse:
+			pos:    self.pos
+			size:   self.size
+			source: self.img
+
+<Game>:
+	player1: p1
+	player2: p2
+	resource: r1
+	explosion1: e1
+	explosion2: e2
+
+	canvas.before:
+        Color:
+            rgb: self.bg_color
+        Rectangle:
+            # self here refers to the widget i.e BoxLayout
+            pos: self.pos
+            size: self.size
+
+	Image:
+		#source: "img/heaven_hell1.jpg"
+		source: "img/bg1.png"
+		size: root.size
+
+	Label:
+		font_size: 22
+		center_x: root.width / 4
+		top: root.top
+		text: str(root.player1.score_res) + " | " + str(root.player1.score_kill)
+
+	Label:
+		font_size: 22
+		center_x: root.width * 3 / 4
+		top: root.top
+		text: str(root.player2.score_res) + " | " + str(root.player2.score_kill)
+
+	Resource:
+		id: r1
+		center_x: root.width / 4
+		center_y: root.height / 3
+
+	Player:
+		id: p1
+		center: self.parent.center
+		img: "img/p_normal_red.png"
+
+		fire: f1
+		Fire:
+			id: f1
+			img: "img/p_killed2.png"
+
+	Player:
+		id: p2
+		center: [self.parent.center_x + self.size[0], self.parent.center_y]
+		img: "img/p_normal_green.png"
+		speed_const: dp(1.0)
+		speed: self.speed_const
+
+		fire: f2
+		Fire:
+			id: f2
+
+	Explosion:
+		id: e1
+		center: self.parent.center
+
+	Explosion:
+		id: e2
+		center: self.parent.center
+		color: (0,1,0)
